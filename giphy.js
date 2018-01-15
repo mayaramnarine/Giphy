@@ -1,64 +1,48 @@
 var seasons =["Summer", "Spring", "Fall", "Winter"];
 
 function createButtons (){
-
-    $("#buttons").empty();
-
-	for (var i= 0; i < seasons.length; i++){
-
-    $("#buttons").append("<button button-name='" + seasons[i] + "'>" + seasons[i] + "</button>");
-
-	console.log("Current Buttons: " + seasons[i]); 
-
-
+$("#buttons").empty();
+for (var i= 0; i < seasons.length; i++){
+$("#buttons").append("<button button-name='" + seasons[i] + "'>" + seasons[i] + "</button>");
+console.log("Current Buttons: " + seasons[i]);
 	}
 };
 
 
 
 createButtons ();
-
 function createNewButton () {
+var newButtonText= $("#add-season").val();
+console.log("New Button: " + newButtonText);
 
-    var newButtonText= $("#add-season").val();
-
-    console.log("New Button: " + newButtonText);
-
-    dogs.push(newButtonText);
+seasons.push(newButtonText);
 
 	createButtons();
 	event.preventDefault();
 	$("#add-season").val("");
-
 	};
 
 $("#buttons").on("click", "button", function(event) {
+event.preventDefault();
+$("#display-seasons").empty();
 
-    event.preventDefault();
-
-    $("#display-seasons").empty();
-
-
-    var buttonText = $(this).attr("button-name");
-
-	var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + buttonText + "&api_key=vpA5777pO1zfXbaH4sCGAfraSqMOohNo";
+var buttonText = $(this).attr("button-name");
+var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + buttonText + "&api_key=vpA5777pO1zfXbaH4sCGAfraSqMOohNo";
 
 	$.ajax ({
+	url: queryUrl,
+  method: "GET"
+	})
 
-		url: queryUrl,
-        method: "GET"
-
-	}).done(function(response) {
+	.done(function(response) {
 
 		console.log("Response:" + response);
 
 		for (var i = 0; i < response.data.length; i++) {
-
-            var newDiv= $("<div />").addClass("divContainer");
-            var newImg = $("<img class='giphy' />");
-            var rating= response.data[i].rating;
-
-        	var p= $("<p>").text("Rated " + rating);
+    var newDiv= $("<div />").addClass("divContainer");
+    var newImg = $("<img class='giphy' />");
+    var rating= response.data[i].rating;
+		var p= $("<p>").text("Rated " + rating);
 
 
 
@@ -73,7 +57,7 @@ $("#buttons").on("click", "button", function(event) {
 
 			newDiv.append(newImg).append(p);
 
-            $("#display-dogs").append(newDiv);
+            $("#display-seasons").append(newDiv);
 
 		}
 	});
